@@ -8742,6 +8742,8 @@ MonoBehaviour:
   - {fileID: 850526301}
   - {fileID: 1749902144}
   _detectionRange: 7
+  _searchWaitTime: 15
+  _searchRadius: 10
 --- !u!195 &1287791215
 NavMeshAgent:
   m_ObjectHideFlags: 0

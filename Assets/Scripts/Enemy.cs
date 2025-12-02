@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     
 
     //Detección
-    [SerializeField] private float _detectionRange = 7;
+    [SerializeField] private float _detectionRange = 4;
 
     //Busqueda
     private float _searchTimer;
