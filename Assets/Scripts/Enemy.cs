@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,6 +25,7 @@ public class Enemy : MonoBehaviour
 
     //Detección
     [SerializeField] private float _detectionRange = 4;
+    [SerializeField] private float _detectionAngle = 90;
 
     //Busqueda
     private float _searchTimer;
@@ -133,6 +135,33 @@ public class Enemy : MonoBehaviour
     {
         _enemyAgent.SetDestination(_patrolPoints[Random.Range(0, _patrolPoints.Length)].position);
     }
+    bool OnRange()
+    {
+        /*if(Vector3.Distance(transform.position, _player.position) < _detectionRange)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }*/
+
+        Vector3 directionToPlayer = _player.position - transform.position;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+
+        if(distanceToPlayer > _detectionRange)
+        {
+            return false;
+        }
+
+        if(angleToPlayer > _detectionAngle * 0.5f)
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     void OnDrawGizmos()
     {
@@ -144,17 +173,13 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _detectionRange);
-    }
 
-    bool OnRange()
-    {
-        if(Vector3.Distance(transform.position, _player.position) < _detectionRange)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        Gizmos.color = Color.yellow;
+
+        Vector3 fovLine1 = Quaternion.AngleAxis(_detectionAngle * 0.5f, transform.up)* transform.forward * _detectionRange;
+        Vector3 fovLine2 = Quaternion.AngleAxis(-_detectionAngle * 0.5f, transform.up)* transform.forward * _detectionRange;
+
+        Gizmos.DrawLine(transform.position, transform.position + fovLine1);
+        Gizmos.DrawLine(transform.position, transform.position + fovLine2);
     }
 }
